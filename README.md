@@ -10,7 +10,7 @@ There are 80+ PDFs for 3 subjects which is impossible for me to complete or woul
 The app would benefit you and every student looking for a Ad-Free stupid-simple app that works without Internet. <br>
 Such an app to my knowledge does not exist on Google Play Store or are paid.
 
-**What I need you to do:** [Demo Video](https://drive.google.com/file/d/1OOck2y2kTgLNAWDe8aaxQqRb3w5QRPd-/view?usp=sharing)
+**What I need you to do:** [Demo Video](https://drive.google.com/file/d/1OOck2y2kTgLNAWDe8aaxQqRb3w5QRPd-/view?usp=sharing)<br>
 After you have the text properly formatted share the link to the .txt file as a pull request (or just paste it in the issues) in Github.
 
 
