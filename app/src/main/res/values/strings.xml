@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Ncert Book Reader</string>
+    <string name="notification_channel_name">NCERT Book Reader Audio</string>
+    <string name="notification_channel_description">Audio playback for NCERT Book Reader</string>
+</resources>

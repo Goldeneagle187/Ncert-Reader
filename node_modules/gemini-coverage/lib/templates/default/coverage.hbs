@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="coverage.css"/>
+    <meta charset="utf-8"/> 
+</head>
+<body>
+    <div class="link-index">
+        {{#if stat.neverUsed}}
+        <span class="warning"><b>This file was never used during tests!</b></span><br/>
+        {{/if}}
+        <span><b>{{projectSource}}</b>: Rules covered: <b
+                title="Percentage of the covered rules">{{stat.percent}}%</b> (<b
+                title="Covered rules">{{stat.covered}}</b>/<b
+                title="Total rules in this file">{{stat.total}}</b>)</span><br/>
+        <a href="index.html">&lt;&lt;Index</a>&nbsp;
+        <span>(<a href="{{source}}">File</a>/<a href="{{url}}">URL</a>)</span>
+    </div>
+    <div class="content">
+        {{{content}}}
+    </div>
+</body>
+</html>
