@@ -7,73 +7,59 @@
         "chapters": [
           {
             "name": "Chapter 1: Units and Measurements",
-            "pdfPath": "pdfs/Units_and_Measurements.pdf",
-            "audioPath": "audios/Units_and_Measurements.mp3"
+            "pdfPath": "pdfs/new/class11/keph101.pdf"
           },
           {
             "name": "Chapter 2: Motion in a Straight Line",
-            "pdfPath": "pdfs/Motion_in_a_Straight_Line.pdf",
-            "audioPath": "audios/Motion_in_a_Straight_Line.mp3"
+            "pdfPath": "pdfs/new/class11/keph102.pdf"
           },
           {
             "name": "Chapter 3: Motion in a Plane",
-            "pdfPath": "pdfs/Motion_in_a_Plane.pdf",
-            "audioPath": "audios/Motion_in_a_Plane.mp3"
+            "pdfPath": "pdfs/new/class11/keph103.pdf"
           },
           {
             "name": "Chapter 4: Laws of Motion",
-            "pdfPath": "pdfs/Laws_of_Motion.pdf",
-            "audioPath": "audios/Laws_of_Motion.mp3"
+            "pdfPath": "pdfs/new/class11/keph104.pdf"
           },
           {
             "name": "Chapter 5: Work, Energy and Power",
-            "pdfPath": "pdfs/Work_Energy_and_Power.pdf",
-            "audioPath": "audios/Work_Energy_and_Power.mp3"
+            "pdfPath": "pdfs/new/class11/keph105.pdf"
           },
           {
             "name": "Chapter 6: System of Particles and Rotational Motion",
-            "pdfPath": "pdfs/System_of_Particles_and_Rotational_Motion.pdf",
-            "audioPath": "audios/System_of_Particles_and_Rotational_Motion.mp3"
+            "pdfPath": "pdfs/new/class11/keph106.pdf"
           },
           {
             "name": "Chapter 7: Gravitation",
-            "pdfPath": "pdfs/Gravitation.pdf",
-            "audioPath": "audios/Gravitation.mp3"
+            "pdfPath": "pdfs/new/class11/keph107.pdf"
           },
           {
             "name": "Chapter 8: Mechanical Properties of Solids",
-            "pdfPath": "pdfs/Mechanical_Properties_of_Solids.pdf",
-            "audioPath": "audios/Mechanical_Properties_of_Solids.mp3"
+            "pdfPath": "pdfs/new/class11/keph201.pdf"
           },
           {
             "name": "Chapter 9: Mechanical Properties of Fluids",
-            "pdfPath": "pdfs/Mechanical_Properties_of_Fluids.pdf",
-            "audioPath": "audios/Mechanical_Properties_of_Fluids.mp3"
+            "pdfPath": "pdfs/new/class11/keph202.pdf"
           },
           {
             "name": "Chapter 10: Thermal Properties of Matter",
-            "pdfPath": "pdfs/Thermal_Properties_of_Matter.pdf",
-            "audioPath": "audios/Thermal_Properties_of_Matter.mp3"
+            "pdfPath": "pdfs/new/class11/keph203.pdf"
           },
           {
             "name": "Chapter 11: Thermodynamics",
-            "pdfPath": "pdfs/Thermodynamics.pdf",
-            "audioPath": "audios/Thermodynamics.mp3"
+            "pdfPath": "pdfs/new/class11/keph204.pdf"
           },
           {
             "name": "Chapter 12: Kinetic Theory",
-            "pdfPath": "pdfs/Kinetic_Theory.pdf",
-            "audioPath": "audios/Kinetic_Theory.mp3"
+            "pdfPath": "pdfs/new/class11/keph205.pdf"
           },
           {
             "name": "Chapter 13: Oscillations",
-            "pdfPath": "pdfs/Oscillations.pdf",
-            "audioPath": "audios/Oscillations.mp3"
+            "pdfPath": "pdfs/new/class11/keph206.pdf"
           },
           {
             "name": "Chapter 14: Waves",
-            "pdfPath": "pdfs/Waves.pdf",
-            "audioPath": "audios/Waves.mp3"
+            "pdfPath": "pdfs/new/class11/keph207.pdf"
           }
         ]
       },
@@ -82,73 +68,59 @@
         "chapters": [
           {
             "name": "Chapter 1: Electric Charges and Fields",
-            "pdfPath": "pdfs/Electric_Charges_and_Fields.pdf",
-            "audioPath": "audios/Electric_Charges_and_Fields.mp3"
+            "pdfPath": "pdfs/new/class12/leph101.pdf"
           },
           {
             "name": "Chapter 2: Electrostatic Potential and Capacitance",
-            "pdfPath": "pdfs/Electrostatic_Potential_and_Capacitance.pdf",
-            "audioPath": "audios/Electrostatic_Potential_and_Capacitance.mp3"
+            "pdfPath": "pdfs/new/class12/leph102.pdf"
           },
           {
             "name": "Chapter 3: Current Electricity",
-            "pdfPath": "pdfs/Current_Electricity.pdf",
-            "audioPath": "audios/Current_Electricity.mp3"
+            "pdfPath": "pdfs/new/class12/leph103.pdf"
           },
           {
             "name": "Chapter 4: Moving Charges and Magnetism",
-            "pdfPath": "pdfs/Moving_Charges_and_Magnetism.pdf",
-            "audioPath": "audios/Moving_Charges_and_Magnetism.mp3"
+            "pdfPath": "pdfs/new/class12/leph104.pdf"
           },
           {
             "name": "Chapter 5: Magnetism and Matter",
-            "pdfPath": "pdfs/Magnetism_and_Matter.pdf",
-            "audioPath": "audios/Magnetism_and_Matter.mp3"
+            "pdfPath": "pdfs/new/class12/leph105.pdf"
           },
           {
             "name": "Chapter 6: Electromagnetic Induction",
-            "pdfPath": "pdfs/Electromagnetic_Induction.pdf",
-            "audioPath": "audios/Electromagnetic_Induction.mp3"
+            "pdfPath": "pdfs/new/class12/leph106.pdf"
           },
           {
             "name": "Chapter 7: Alternating Current",
-            "pdfPath": "pdfs/Alternating_Current.pdf",
-            "audioPath": "audios/Alternating_Current.mp3"
+            "pdfPath": "pdfs/new/class12/leph107.pdf"
           },
           {
             "name": "Chapter 8: Electromagnetic Waves",
-            "pdfPath": "pdfs/Electromagnetic_Waves.pdf",
-            "audioPath": "audios/Electromagnetic_Waves.mp3"
+            "pdfPath": "pdfs/new/class12/leph108.pdf"
           },
           {
             "name": "Chapter 9: Ray Optics and Optical Instruments",
-            "pdfPath": "pdfs/Ray_Optics_and_Optical_Instruments.pdf",
-            "audioPath": "audios/Ray_Optics_and_Optical_Instruments.mp3"
+            "pdfPath": "pdfs/new/class12/leph201.pdf"
           },
           {
             "name": "Chapter 10: Wave Optics",
-            "pdfPath": "pdfs/Wave_Optics.pdf",
-            "audioPath": "audios/Wave_Optics.mp3"
+            "pdfPath": "pdfs/new/class12/leph202.pdf"
           },
           {
             "name": "Chapter 11: Dual Nature of Radiation and Matter",
-            "pdfPath": "pdfs/Dual_Nature_of_Radiation_and_Matter.pdf",
-            "audioPath": "audios/Dual_Nature_of_Radiation_and_Matter.mp3"
+            "pdfPath": "pdfs/new/class12/leph203.pdf"
           },
           {
             "name": "Chapter 12: Atoms",
-            "pdfPath": "pdfs/Atoms.pdf",
-            "audioPath": "audios/Atoms.mp3"
+            "pdfPath": "pdfs/new/class12/leph204.pdf"
           },
           {
             "name": "Chapter 13: Nuclei",
-            "pdfPath": "pdfs/Nuclei.pdf",
-            "audioPath": "audios/Nuclei.mp3"
+            "pdfPath": "pdfs/new/class12/leph205.pdf"
           },
           {
             "name": "Chapter 14: Semiconductor Electronics: Materials, Devices and Simple Circuits",
-            "pdfPath": "pdfs/Semiconductor_Electronics_Materials_Devices_and_Simple_Circuits.pdf",
-            "audioPath": "audios/Semiconductor_Electronics_Materials_Devices_and_Simple_Circuits.mp3"
+            "pdfPath": "pdfs/new/class12/leph206.pdf"
           }
         ]
       }
@@ -162,48 +134,39 @@
         "chapters": [
           {
             "name": "Chapter 1: Some Basic Concepts of Chemistry",
-            "pdfPath": "pdfs/Some_Basic_Concepts_of_Chemistry.pdf",
-            "audioPath": "audios/Some_Basic_Concepts_of_Chemistry.mp3"
+            "pdfPath": "pdfs/new/class11/kech101.pdf"
           },
           {
             "name": "Chapter 2: Structure of Atom",
-            "pdfPath": "pdfs/Structure_of_Atom.pdf",
-            "audioPath": "audios/Structure_of_Atom.mp3"
+            "pdfPath": "pdfs/new/class11/kech102.pdf"
           },
           {
             "name": "Chapter 3: Classification of Elements and Periodicity in Properties",
-            "pdfPath": "pdfs/Classification_of_Elements_and_Periodicity_in_Properties.pdf",
-            "audioPath": "audios/Classification_of_Elements_and_Periodicity_in_Properties.mp3"
+            "pdfPath": "pdfs/new/class11/kech103.pdf"
           },
           {
             "name": "Chapter 4: Chemical Bonding and Molecular Structure",
-            "pdfPath": "pdfs/Chemical_Bonding_and_Molecular_Structure.pdf",
-            "audioPath": "audios/Chemical_Bonding_and_Molecular_Structure.mp3"
+            "pdfPath": "pdfs/new/class11/kech104.pdf"
           },
           {
             "name": "Chapter 5: Thermodynamics",
-            "pdfPath": "pdfs/Thermodynamics.pdf",
-            "audioPath": "audios/Thermodynamics.mp3"
+            "pdfPath": "pdfs/new/class11/kech105.pdf"
           },
           {
             "name": "Chapter 6: Equilibrium",
-            "pdfPath": "pdfs/Equilibrium.pdf",
-            "audioPath": "audios/Equilibrium.mp3"
+            "pdfPath": "pdfs/new/class11/kech106.pdf"
           },
           {
             "name": "Chapter 7: Redox Reactions",
-            "pdfPath": "pdfs/Redox_Reactions.pdf",
-            "audioPath": "audios/Redox_Reactions.mp3"
+            "pdfPath": "pdfs/new/class11/kech201.pdf"
           },
           {
             "name": "Chapter 8: Organic Chemistry – Some Basic Principles and Techniques",
-            "pdfPath": "pdfs/Organic_Chemistry_–_Some_Basic_Principles_and_Techniques.pdf",
-            "audioPath": "audios/Organic_Chemistry_–_Some_Basic_Principles_and_Techniques.mp3"
+            "pdfPath": "pdfs/new/class11/kech202.pdf"
           },
           {
             "name": "Chapter 9: Hydrocarbons",
-            "pdfPath": "pdfs/Hydrocarbons.pdf",
-            "audioPath": "audios/Hydrocarbons.mp3"
+            "pdfPath": "pdfs/new/class11/kech203.pdf"
           }
         ]
       },
@@ -212,53 +175,43 @@
         "chapters": [
           {
             "name": "Chapter 1: Solutions",
-            "pdfPath": "pdfs/Solutions.pdf",
-            "audioPath": "audios/Solutions.mp3"
+            "pdfPath": "pdfs/new/class12/lech101.pdf"
           },
           {
             "name": "Chapter 2: Electrochemistry",
-            "pdfPath": "pdfs/Electrochemistry.pdf",
-            "audioPath": "audios/Electrochemistry.mp3"
+            "pdfPath": "pdfs/new/class12/lech102.pdf"
           },
           {
             "name": "Chapter 3: Chemical Kinetics",
-            "pdfPath": "pdfs/Chemical_Kinetics.pdf",
-            "audioPath": "audios/Chemical_Kinetics.mp3"
+            "pdfPath": "pdfs/new/class12/lech103.pdf"
           },
           {
-            "name": "Chapter 4: The d-and f-Block Elements",
-            "pdfPath": "pdfs/The_d-and_f-Block_Elements.pdf",
-            "audioPath": "audios/The_d-and_f-Block_Elements.mp3"
+            "name": "Chapter 4: The d- and f-Block Elements",
+            "pdfPath": "pdfs/new/class12/lech104.pdf"
           },
           {
             "name": "Chapter 5: Coordination Compounds",
-            "pdfPath": "pdfs/Coordination_Compounds.pdf",
-            "audioPath": "audios/Coordination_Compounds.mp3"
+            "pdfPath": "pdfs/new/class12/lech105.pdf"
           },
           {
             "name": "Chapter 6: Haloalkanes and Haloarenes",
-            "pdfPath": "pdfs/Haloalkanes_and_Haloarenes.pdf",
-            "audioPath": "audios/Haloalkanes_and_Haloarenes.mp3"
+            "pdfPath": "pdfs/new/class12/lech201.pdf"
           },
           {
             "name": "Chapter 7: Alcohols, Phenols and Ethers",
-            "pdfPath": "pdfs/Alcohols_Phenols_and_Ethers.pdf",
-            "audioPath": "audios/Alcohols_Phenols_and_Ethers.mp3"
+            "pdfPath": "pdfs/new/class12/lech202.pdf"
           },
           {
             "name": "Chapter 8: Aldehydes, Ketones and Carboxylic Acids",
-            "pdfPath": "pdfs/Aldehydes_Ketones_and_Carboxylic_Acids.pdf",
-            "audioPath": "audios/Aldehydes_Ketones_and_Carboxylic_Acids.mp3"
+            "pdfPath": "pdfs/new/class12/lech203.pdf"
           },
           {
             "name": "Chapter 9: Amines",
-            "pdfPath": "pdfs/Amines.pdf",
-            "audioPath": "audios/Amines.mp3"
+            "pdfPath": "pdfs/new/class12/lech204.pdf"
           },
           {
             "name": "Chapter 10: Biomolecules",
-            "pdfPath": "pdfs/Biomolecules.pdf",
-            "audioPath": "audios/Biomolecules.mp3"
+            "pdfPath": "pdfs/new/class12/lech205.pdf"
           }
         ]
       }
@@ -272,98 +225,79 @@
         "chapters": [
           {
             "name": "Chapter 1: The Living World",
-            "pdfPath": "pdfs/The_Living_World.pdf",
-            "audioPath": "audios/The_Living_World.mp3"
+            "pdfPath": "pdfs/new/class11/kebo101.pdf"
           },
           {
             "name": "Chapter 2: Biological Classification",
-            "pdfPath": "pdfs/Biological_Classification.pdf",
-            "audioPath": "audios/Biological_Classification.mp3"
+            "pdfPath": "pdfs/new/class11/kebo102.pdf"
           },
           {
             "name": "Chapter 3: Plant Kingdom",
-            "pdfPath": "pdfs/Plant_Kingdom.pdf",
-            "audioPath": "audios/Plant_Kingdom.mp3"
+            "pdfPath": "pdfs/new/class11/kebo103.pdf"
           },
           {
             "name": "Chapter 4: Animal Kingdom",
-            "pdfPath": "pdfs/Animal_Kingdom.pdf",
-            "audioPath": "audios/Animal_Kingdom.mp3"
+            "pdfPath": "pdfs/new/class11/kebo104.pdf"
           },
           {
             "name": "Chapter 5: Morphology of Flowering Plants",
-            "pdfPath": "pdfs/Morphology_of_Flowering_Plants.pdf",
-            "audioPath": "audios/Morphology_of_Flowering_Plants.mp3"
+            "pdfPath": "pdfs/new/class11/kebo105.pdf"
           },
           {
             "name": "Chapter 6: Anatomy of Flowering Plants",
-            "pdfPath": "pdfs/Anatomy_of_Flowering_Plants.pdf",
-            "audioPath": "audios/Anatomy_of_Flowering_Plants.mp3"
+            "pdfPath": "pdfs/new/class11/kebo106.pdf"
           },
           {
             "name": "Chapter 7: Structural Organisation in Animals",
-            "pdfPath": "pdfs/Structural_Organisation_in_Animals.pdf",
-            "audioPath": "audios/Structural_Organisation_in_Animals.mp3"
+            "pdfPath": "pdfs/new/class11/kebo107.pdf"
           },
           {
             "name": "Chapter 8: Cell: The Unit of Life",
-            "pdfPath": "pdfs/Cell_The_Unit_of_Life.pdf",
-            "audioPath": "audios/Cell_The_Unit_of_Life.mp3"
+            "pdfPath": "pdfs/new/class11/kebo108.pdf"
           },
           {
             "name": "Chapter 9: Biomolecules",
-            "pdfPath": "pdfs/Biomolecules.pdf",
-            "audioPath": "audios/Biomolecules.mp3"
+            "pdfPath": "pdfs/new/class11/kebo109.pdf"
           },
           {
             "name": "Chapter 10: Cell Cycle and Cell Division",
-            "pdfPath": "pdfs/Cell_Cycle_and_Cell_Division.pdf",
-            "audioPath": "audios/Cell_Cycle_and_Cell_Division.mp3"
+            "pdfPath": "pdfs/new/class11/kebo110.pdf"
           },
           {
             "name": "Chapter 11: Photosynthesis in Higher Plants",
-            "pdfPath": "pdfs/Photosynthesis_in_Higher_Plants.pdf",
-            "audioPath": "audios/Photosynthesis_in_Higher_Plants.mp3"
+            "pdfPath": "pdfs/new/class11/kebo111.pdf"
           },
           {
             "name": "Chapter 12: Respiration in Plants",
-            "pdfPath": "pdfs/Respiration_in_Plants.pdf",
-            "audioPath": "audios/Respiration_in_Plants.mp3"
+            "pdfPath": "pdfs/new/class11/kebo112.pdf"
           },
           {
             "name": "Chapter 13: Plant Growth and Development",
-            "pdfPath": "pdfs/Plant_Growth_and_Development.pdf",
-            "audioPath": "audios/Plant_Growth_and_Development.mp3"
+            "pdfPath": "pdfs/new/class11/kebo113.pdf"
           },
           {
             "name": "Chapter 14: Breathing and Exchange of Gases",
-            "pdfPath": "pdfs/Breathing_and_Exchange_of_Gases.pdf",
-            "audioPath": "audios/Breathing_and_Exchange_of_Gases.mp3"
+            "pdfPath": "pdfs/new/class11/kebo114.pdf"
           },
           {
             "name": "Chapter 15: Body Fluids and Circulation",
-            "pdfPath": "pdfs/Body_Fluids_and_Circulation.pdf",
-            "audioPath": "audios/Body_Fluids_and_Circulation.mp3"
+            "pdfPath": "pdfs/new/class11/kebo115.pdf"
           },
           {
             "name": "Chapter 16: Excretory Products and their Elimination",
-            "pdfPath": "pdfs/Excretory_Products_and_their_Elimination.pdf",
-            "audioPath": "audios/Excretory_Products_and_their_Elimination.mp3"
+            "pdfPath": "pdfs/new/class11/kebo116.pdf"
           },
           {
             "name": "Chapter 17: Locomotion and Movement",
-            "pdfPath": "pdfs/Locomotion_and_Movement.pdf",
-            "audioPath": "audios/Locomotion_and_Movement.mp3"
+            "pdfPath": "pdfs/new/class11/kebo117.pdf"
           },
           {
             "name": "Chapter 18: Neural Control and Coordination",
-            "pdfPath": "pdfs/Neural_Control_and_Coordination.pdf",
-            "audioPath": "audios/Neural_Control_and_Coordination.mp3"
+            "pdfPath": "pdfs/new/class11/kebo118.pdf"
           },
           {
             "name": "Chapter 19: Chemical Coordination and Integration",
-            "pdfPath": "pdfs/Chemical_Coordination_and_Integration.pdf",
-            "audioPath": "audios/Chemical_Coordination_and_Integration.mp3"
+            "pdfPath": "pdfs/new/class11/kebo119.pdf"
           }
         ]
       },
@@ -372,68 +306,55 @@
         "chapters": [
           {
             "name": "Chapter 1: Sexual Reproduction in Flowering Plants",
-            "pdfPath": "pdfs/Sexual_Reproduction_in_Flowering_Plants.pdf",
-            "audioPath": "audios/Sexual_Reproduction_in_Flowering_Plants.mp3"
+            "pdfPath": "pdfs/new/class12/lebo101.pdf"
           },
           {
             "name": "Chapter 2: Human Reproduction",
-            "pdfPath": "pdfs/Human_Reproduction.pdf",
-            "audioPath": "audios/Human_Reproduction.mp3"
+            "pdfPath": "pdfs/new/class12/lebo102.pdf"
           },
           {
             "name": "Chapter 3: Reproductive Health",
-            "pdfPath": "pdfs/Reproductive_Health.pdf",
-            "audioPath": "audios/Reproductive_Health.mp3"
+            "pdfPath": "pdfs/new/class12/lebo103.pdf"
           },
           {
             "name": "Chapter 4: Principles of Inheritance and Variation",
-            "pdfPath": "pdfs/Principles_of_Inheritance_and_Variation.pdf",
-            "audioPath": "audios/Principles_of_Inheritance_and_Variation.mp3"
+            "pdfPath": "pdfs/new/class12/lebo104.pdf"
           },
           {
             "name": "Chapter 5: Molecular Basis of Inheritance",
-            "pdfPath": "pdfs/Molecular_Basis_of_Inheritance.pdf",
-            "audioPath": "audios/Molecular_Basis_of_Inheritance.mp3"
+            "pdfPath": "pdfs/new/class12/lebo105.pdf"
           },
           {
             "name": "Chapter 6: Evolution",
-            "pdfPath": "pdfs/Evolution.pdf",
-            "audioPath": "audios/Evolution.mp3"
+            "pdfPath": "pdfs/new/class12/lebo106.pdf"
           },
           {
             "name": "Chapter 7: Human Health and Disease",
-            "pdfPath": "pdfs/Human_Health_and_Disease.pdf",
-            "audioPath": "audios/Human_Health_and_Disease.mp3"
+            "pdfPath": "pdfs/new/class12/lebo107.pdf"
           },
           {
             "name": "Chapter 8: Microbes in Human Welfare",
-            "pdfPath": "pdfs/Microbes_in_Human_Welfare.pdf",
-            "audioPath": "audios/Microbes_in_Human_Welfare.mp3"
+            "pdfPath": "pdfs/new/class12/lebo108.pdf"
           },
           {
-            "name": "Chapter 9: Biotechnology : Principles and Processes",
-            "pdfPath": "pdfs/Biotechnology_Principles_and_Processes.pdf",
-            "audioPath": "audios/Biotechnology_Principles_and_Processes.mp3"
+            "name": "Chapter 9: Biotechnology: Principles and Processes",
+            "pdfPath": "pdfs/new/class12/lebo109.pdf"
           },
           {
             "name": "Chapter 10: Biotechnology and its Applications",
-            "pdfPath": "pdfs/Biotechnology_and_its_Applications.pdf",
-            "audioPath": "audios/Biotechnology_and_its_Applications.mp3"
+            "pdfPath": "pdfs/new/class12/lebo110.pdf"
           },
           {
             "name": "Chapter 11: Organisms and Populations",
-            "pdfPath": "pdfs/Organisms_and_Populations.pdf",
-            "audioPath": "audios/Organisms_and_Populations.mp3"
+            "pdfPath": "pdfs/new/class12/lebo111.pdf"
           },
           {
             "name": "Chapter 12: Ecosystem",
-            "pdfPath": "pdfs/Ecosystem.pdf",
-            "audioPath": "audios/Ecosystem.mp3"
+            "pdfPath": "pdfs/new/class12/lebo112.pdf"
           },
           {
             "name": "Chapter 13: Biodiversity and Conservation",
-            "pdfPath": "pdfs/Biodiversity_and_Conservation.pdf",
-            "audioPath": "audios/Biodiversity_and_Conservation.mp3"
+            "pdfPath": "pdfs/new/class12/lebo113.pdf"
           }
         ]
       }
