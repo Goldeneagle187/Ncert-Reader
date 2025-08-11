@@ -1,454 +1,451 @@
 package com.example.ncertbookreader
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MenuBook
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.ncertbookreader.ui.theme.NcertBookReaderTheme
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
 import java.io.File
-import java.io.FileOutputStream
+import java.io.FileNotFoundException
 import java.io.IOException
-import java.util.concurrent.TimeUnit
+
+// --- Data Models ---
+@Serializable
+data class Subject(val name: String, val gradeLevels: List<GradeLevel>)
 
 @Serializable
-data class Subject(
-    val name: String,
-    val gradeLevels: List<GradeLevel>
-)
-
-@Serializable
-data class GradeLevel(
-    val name: String,
-    val chapters: List<Chapter>
-)
+data class GradeLevel(val name: String, val chapters: List<Chapter>)
 
 @Serializable
 data class Chapter(
     val name: String,
     val pdfPath: String,
-    val audioPath: String
+    val oldPdfPath: String? = null,
+    val audioPath: String? = null
 )
 
-@Composable
-fun formatTimeMillis(millis: Long): String {
-    val hours = TimeUnit.MILLISECONDS.toHours(millis)
-    val minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1)
-    val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % TimeUnit.MINUTES.toSeconds(1)
-    return if (hours > 0) {
-        String.format("%02d:%02d:%02d", hours, minutes, seconds)
-    } else {
-        String.format("%02d:%02d", minutes, seconds)
+/**
+ * Loads and parses the subject data from the "data.json" file in the assets folder.
+ */
+fun loadSubjects(context: Context): List<Subject> {
+    return try {
+        val jsonString = context.assets.open("data.json").bufferedReader().use { it.readText() }
+        if (jsonString.isBlank()) {
+            Log.e("NcertApp", "data.json is empty.")
+            Toast.makeText(context, "Error: App data file is empty.", Toast.LENGTH_LONG).show()
+            return emptyList()
+        }
+        val json = Json { ignoreUnknownKeys = true; coerceInputValues = true }
+        json.decodeFromString(ListSerializer(Subject.serializer()), jsonString)
+    } catch (e: IOException) {
+        Log.e("NcertApp", "Failed to read data.json from assets.", e)
+        Toast.makeText(context, "Error: Could not read app data file.", Toast.LENGTH_LONG).show()
+        emptyList()
+    } catch (e: Exception) {
+        Log.e("NcertApp", "Failed to parse data.json.", e)
+        Toast.makeText(context, "Error: Invalid format in app data file.", Toast.LENGTH_LONG).show()
+        emptyList()
     }
 }
 
-class MainActivity : ComponentActivity() {
+/**
+ * Securely opens a PDF file from the app's assets.
+ */
+fun openPdf(context: Context, pdfPath: String, chapterName: String) {
+    val assetPath = pdfPath.removePrefix("/")
+    val fileName = assetPath.substringAfterLast('/')
 
+    if (fileName.isBlank()) {
+        Toast.makeText(context, "Could not determine file name from path: $assetPath", Toast.LENGTH_LONG).show()
+        return
+    }
+    val destinationFile = File(context.cacheDir, fileName)
+
+    try {
+        if (!destinationFile.exists() || destinationFile.length() == 0L) {
+            Log.d("NcertApp", "Copying asset '$assetPath' to '${destinationFile.absolutePath}'")
+            context.assets.open(assetPath).use { inputStream ->
+                destinationFile.outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
+        }
+
+        if (!destinationFile.exists() || destinationFile.length() == 0L) {
+            throw IOException("Failed to copy file to cache. File is missing or empty.")
+        }
+
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            destinationFile
+        )
+
+        val intent = Intent(Intent.ACTION_VIEW).apply {
+            setDataAndType(uri, "application/pdf")
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        }
+
+        Log.d("NcertApp", "Attempting to launch PDF viewer for URI: $uri")
+        context.startActivity(intent)
+
+    } catch (e: FileNotFoundException) {
+        Log.e("NcertApp", "Asset not found at path: '$assetPath'. Check your data.json and assets folder.", e)
+        Toast.makeText(context, "PDF file not found in the app.", Toast.LENGTH_LONG).show()
+    } catch (e: ActivityNotFoundException) {
+        Log.e("NcertApp", "ActivityNotFoundException: No PDF reader is installed or configured.", e)
+        Toast.makeText(context, "No PDF reader app is installed.", Toast.LENGTH_LONG).show()
+    } catch (e: IOException) {
+        Log.e("NcertApp", "IOException while copying file '$assetPath'.", e)
+        Toast.makeText(context, "Error: Could not read or save PDF file.", Toast.LENGTH_LONG).show()
+    } catch (e: Exception) {
+        Log.e("NcertApp", "An unexpected error occurred for path '$assetPath'.", e)
+        Toast.makeText(context, "An unexpected error occurred.", Toast.LENGTH_LONG).show()
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme {
-                NcertApp()
-            }
-        }
-    }
+            NcertBookReaderTheme {
+                val primaryContainerColor = MaterialTheme.colorScheme.primaryContainer
+                val isDarkTheme = isSystemInDarkTheme()
 
-    private fun viewPdfFromAssets(context: Context, pdfPath: String) {
-        val assetManager = context.assets
-        try {
-            val inputStream = assetManager.open(pdfPath)
-            val file = File(context.cacheDir, pdfPath.substringAfterLast('/'))
-            val outputStream = FileOutputStream(file)
-            inputStream.copyTo(outputStream)
-            inputStream.close()
-            outputStream.close()
-
-            val uri = FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.provider",
-                file
-            )
-
-            val intent = Intent(Intent.ACTION_VIEW).apply {
-                setDataAndType(uri, "application/pdf")
-                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            }
-            context.startActivity(intent)
-        } catch (e: IOException) {
-            Toast.makeText(context, "Error opening PDF: ${e.message}", Toast.LENGTH_LONG).show()
-            e.printStackTrace()
-        } catch (e: ActivityNotFoundException) {
-            Toast.makeText(context, "No PDF viewer app found.", Toast.LENGTH_LONG).show()
-            e.printStackTrace()
-        }
-    }
-
-    @Composable
-    fun NcertApp() {
-        val navController = rememberNavController()
-        val context = LocalContext.current
-        val subjects = loadSubjectsFromAssets(context)
-
-        // 1. Get an instance of the PlaybackViewModel
-        val playbackViewModel: PlaybackViewModel = viewModel()
-        val playbackUiState by playbackViewModel.uiState.collectAsState()
-
-        // 2. Initialize the MediaBrowser when the app starts
-        LaunchedEffect(Unit) {
-            playbackViewModel.initializeBrowser(context)
-        }
-
-        // Display any errors from the ViewModel
-        playbackUiState.errorMessage?.let { error ->
-            Toast.makeText(context, error, Toast.LENGTH_LONG).show()
-        }
-
-        Scaffold(
-            topBar = {
-                AppTopBar(navController = navController)
-            }
-        ) { innerPadding ->
-            if (subjects == null) {
-                Box(modifier = Modifier.fillMaxSize().padding(innerPadding), contentAlignment = Alignment.Center) {
-                    Text("Error: Could not load data.json or data is invalid.", style = MaterialTheme.typography.bodyLarge)
-                }
-                return@Scaffold
-            }
-            // ... (rest of the NavHost setup is the same)
-
-            NavHost(
-                navController = navController,
-                startDestination = "subjects",
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                composable("subjects") {
-                    SubjectScreen(subjects = subjects, onSubjectClick = { subjectName ->
-                        navController.navigate("gradeLevels/$subjectName")
-                    })
-                }
-                composable(
-                    "gradeLevels/{subjectName}",
-                    arguments = listOf(navArgument("subjectName") { type = NavType.StringType })
-                ) { backStackEntry ->
-                    val subjectName = backStackEntry.arguments?.getString("subjectName")
-                    val subject = subjects.find { it.name == subjectName }
-                    subject?.let {
-                        GradeLevelScreen(
-                            subject = it,
-                            onGradeLevelClick = { gradeLevelName ->
-                                navController.navigate("chapters/${it.name}/$gradeLevelName")
-                            }
-                        )
-                    } ?: Text("Subject not found")
-                }
-                composable(
-                    "chapters/{subjectName}/{gradeLevelName}",
-                    arguments = listOf(
-                        navArgument("subjectName") { type = NavType.StringType },
-                        navArgument("gradeLevelName") { type = NavType.StringType }
-                    )
-                ) { backStackEntry ->
-                    val subjectName = backStackEntry.arguments?.getString("subjectName")
-                    val gradeLevelName = backStackEntry.arguments?.getString("gradeLevelName")
-                    val subject = subjects.find { it.name == subjectName }
-                    val gradeLevel = subject?.gradeLevels?.find { it.name == gradeLevelName }
-                    gradeLevel?.let {
-                        ChapterScreen(
-                            gradeLevel = it,
-                            onViewPdf = { pdfPath -> viewPdfFromAssets(context, pdfPath) },
-                            // Pass the state from the ViewModel
-                            playbackState = playbackUiState,
-                            // Pass the control methods from the ViewModel
-                            onPlayPauseAudio = { chapter ->
-                                val isCurrentlyPlayingThis = playbackUiState.isPlaying && playbackUiState.currentAudioPath == chapter.audioPath
-                                if (isCurrentlyPlayingThis) {
-                                    playbackViewModel.pauseAudio()
-                                } else {
-                                    // Check if it's the same track but paused
-                                    if (playbackUiState.currentAudioPath == chapter.audioPath) {
-                                        playbackViewModel.resumeAudio()
-                                    } else {
-                                        // It's a new track
-                                        playbackViewModel.playAudio(context, chapter.audioPath, chapter.name)
-                                    }
-                                }
-                            },
-                            onSeekTo = { position ->
-                                playbackViewModel.seekAudio(position)
-                            }
-                        )
-                    } ?: Text("Chapter list not found")
-                }
-            }
-        }
-    }
-
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun AppTopBar(navController: NavHostController) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = navBackStackEntry?.destination?.route
-        val title = when {
-            currentRoute == "subjects" -> "Select Subject"
-            currentRoute?.startsWith("gradeLevels/") == true -> {
-                navBackStackEntry?.arguments?.getString("subjectName") ?: "Select Class"
-            }
-            currentRoute?.startsWith("chapters/") == true -> {
-                navBackStackEntry?.arguments?.getString("gradeLevelName") ?: "Select Chapter"
-            }
-            else -> "Ncert Book Reader"
-        }
-
-        TopAppBar(
-            title = { Text(text = title, maxLines = 1, overflow = TextOverflow.Ellipsis) },
-            navigationIcon = {
-                if (navController.previousBackStackEntry != null) {
-                    IconButton(onClick = { navController.navigateUp() }) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                // This SideEffect will run after composition to update the system UI
+                val view = LocalView.current
+                if (!view.isInEditMode) {
+                    SideEffect {
+                        val window = (view.context as Activity).window
+                        // Set the status bar color to match the TopAppBar
+                        window.statusBarColor = primaryContainerColor.toArgb()
+                        // Set the status bar icons to be visible against the new background color
+                        WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !isDarkTheme
                     }
                 }
-            },
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-        )
-    }
 
-    fun loadSubjectsFromAssets(context: Context): List<Subject>? {
-        return try {
-            context.assets.open("data.json").bufferedReader().use {
-                Json { ignoreUnknownKeys = true }.decodeFromString<List<Subject>>(it.readText())
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    // The main entry point for the app's UI
+                    NcertApp()
+                }
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        } catch (e: kotlinx.serialization.SerializationException) {
-            e.printStackTrace()
-            null
         }
     }
+}
 
-    // All globalMediaPlayer logic and lifecycle overrides (onStop, onDestroy) are removed.
-    // The ViewModel lifecycle is automatically handled by the 'viewModel()' delegate.
+/**
+ * The main composable that sets up the app's navigation and structure.
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun NcertApp() {
+    val navController = rememberNavController()
+    val context = LocalContext.current
+    // Load subjects once and remember the result
+    val subjects by remember { mutableStateOf(loadSubjects(context)) }
 
-    // ... (SubjectScreen and GradeLevelScreen are unchanged) ...
-    @Composable
-    fun SubjectScreen(subjects: List<Subject>, onSubjectClick: (String) -> Unit) {
+    // Get current back stack entry to determine the current screen
+    val backStackEntry by navController.currentBackStackEntryAsState()
+
+    // Determine the title based on the current route
+    val currentSubjectName = backStackEntry?.arguments?.getString("subjectName")
+    val currentGradeLevelName = backStackEntry?.arguments?.getString("gradeLevelName")
+
+    val title = when {
+        currentGradeLevelName != null -> currentGradeLevelName
+        currentSubjectName != null -> currentSubjectName
+        else -> "NCERT Books"
+    }
+
+    Scaffold(
+        topBar = {
+            AppTopBar(
+                title = title,
+                canNavigateBack = navController.previousBackStackEntry != null,
+                onNavigateUp = { navController.navigateUp() }
+            )
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = "subjects",
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            // Route for the main subjects screen
+            composable("subjects") {
+                SubjectScreen(
+                    subjects = subjects,
+                    onSubjectClick = { subjectName ->
+                        navController.navigate("subject/$subjectName")
+                    }
+                )
+            }
+            // Route for the grade levels of a specific subject
+            composable(
+                route = "subject/{subjectName}",
+                arguments = listOf(navArgument("subjectName") { type = NavType.StringType })
+            ) { navBackStackEntry ->
+                val subjectName = navBackStackEntry.arguments?.getString("subjectName")
+                val subject = subjects.find { it.name == subjectName }
+                if (subject != null) {
+                    GradeLevelScreen(
+                        subject = subject,
+                        onGradeClick = { gradeLevelName ->
+                            navController.navigate("subject/$subjectName/$gradeLevelName")
+                        }
+                    )
+                } else {
+                    FullScreenMessage("Subject not found.")
+                }
+            }
+            // Route for the chapters of a specific grade level
+            composable(
+                route = "subject/{subjectName}/{gradeLevelName}",
+                arguments = listOf(
+                    navArgument("subjectName") { type = NavType.StringType },
+                    navArgument("gradeLevelName") { type = NavType.StringType }
+                )
+            ) { navBackStackEntry ->
+                val subjectName = navBackStackEntry.arguments?.getString("subjectName")
+                val gradeLevelName = navBackStackEntry.arguments?.getString("gradeLevelName")
+                val gradeLevel = subjects.find { it.name == subjectName }
+                    ?.gradeLevels?.find { it.name == gradeLevelName }
+
+                if (gradeLevel != null) {
+                    ChapterScreen(
+                        gradeLevel = gradeLevel,
+                        onOpenNewNcert = { chapter ->
+                            openPdf(context, chapter.pdfPath, chapter.name)
+                        },
+                        onOpenOldNcert = { chapter ->
+                            chapter.oldPdfPath?.let { openPdf(context, it, chapter.name) }
+                        },
+                        onPlayAudio = { chapter ->
+                            Toast.makeText(context, "Audio playback not implemented.", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                } else {
+                    FullScreenMessage("Chapter list not found.")
+                }
+            }
+        }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AppTopBar(title: String, canNavigateBack: Boolean, onNavigateUp: () -> Unit) {
+    TopAppBar(
+        title = {
+            Text(
+                text = title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        },
+        navigationIcon = {
+            if (canNavigateBack) {
+                IconButton(onClick = onNavigateUp) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Navigate back"
+                    )
+                }
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SubjectScreen(subjects: List<Subject>, onSubjectClick: (String) -> Unit) {
+    if (subjects.isEmpty()) {
+        FullScreenMessage("No subjects available")
+    } else {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(subjects) { subject ->
-                SubjectItem(subject = subject, onClick = { onSubjectClick(subject.name) })
+                ElevatedCard(
+                    onClick = { onSubjectClick(subject.name) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = subject.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = "Go to ${subject.name}"
+                        )
+                    }
+                }
             }
         }
     }
+}
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun SubjectItem(subject: Subject, onClick: () -> Unit) {
-        ElevatedCard(
-            onClick = onClick,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = subject.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.weight(1f)
-                )
-                Icon(
-                    imageVector = Icons.Filled.ChevronRight,
-                    contentDescription = "Go to ${subject.name}",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-
-    @Composable
-    fun GradeLevelScreen(subject: Subject, onGradeLevelClick: (String) -> Unit) {
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun GradeLevelScreen(subject: Subject, onGradeClick: (String) -> Unit) {
+    if (subject.gradeLevels.isEmpty()) {
+        FullScreenMessage("No grade levels available for ${subject.name}")
+    } else {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(subject.gradeLevels) { gradeLevel ->
-                GradeLevelItem(gradeLevel = gradeLevel, onClick = { onGradeLevelClick(gradeLevel.name) })
+                ElevatedCard(
+                    onClick = { onGradeClick(gradeLevel.name) },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 20.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = gradeLevel.name,
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        Icon(
+                            imageVector = Icons.Default.ChevronRight,
+                            contentDescription = "Go to ${gradeLevel.name}"
+                        )
+                    }
+                }
             }
         }
     }
+}
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun GradeLevelItem(gradeLevel: GradeLevel, onClick: () -> Unit) {
-        ElevatedCard(
-            onClick = onClick,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 20.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = gradeLevel.name,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.weight(1f)
-                )
-                Icon(
-                    imageVector = Icons.Filled.ChevronRight,
-                    contentDescription = "Go to ${gradeLevel.name}",
-                    tint = MaterialTheme.colorScheme.primary
-                )
-            }
-        }
-    }
-
-    @Composable
-    fun ChapterScreen(
-        gradeLevel: GradeLevel,
-        onViewPdf: (String) -> Unit,
-        playbackState: PlaybackUiState, // Use the ViewModel's state
-        onPlayPauseAudio: (Chapter) -> Unit,
-        onSeekTo: (Long) -> Unit
-    ) {
+@Composable
+fun ChapterScreen(
+    gradeLevel: GradeLevel,
+    onOpenNewNcert: (Chapter) -> Unit,
+    onOpenOldNcert: (Chapter) -> Unit,
+    onPlayAudio: (Chapter) -> Unit
+) {
+    if (gradeLevel.chapters.isEmpty()) {
+        FullScreenMessage("No chapters available for ${gradeLevel.name}")
+    } else {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            contentPadding = PaddingValues(vertical = 8.dp)
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(gradeLevel.chapters) { chapter ->
                 ChapterItem(
                     chapter = chapter,
-                    onViewPdf = onViewPdf,
-                    isPlayingThisChapter = playbackState.isPlaying && playbackState.currentAudioPath == chapter.audioPath,
-                    onPlayPauseClick = { onPlayPauseAudio(chapter) },
-                    currentPosition = if (playbackState.currentAudioPath == chapter.audioPath) playbackState.currentPositionMs else 0L,
-                    totalDuration = if (playbackState.currentAudioPath == chapter.audioPath) playbackState.totalDurationMs else 0L,
-                    isBuffering = playbackState.isBuffering && playbackState.currentAudioPath == chapter.audioPath,
-                    onSeekTo = onSeekTo
+                    onOpenNewNcert = onOpenNewNcert,
+                    onOpenOldNcert = onOpenOldNcert,
+                    onPlayAudio = onPlayAudio
                 )
             }
         }
     }
+}
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    fun ChapterItem(
-        chapter: Chapter,
-        onViewPdf: (String) -> Unit,
-        isPlayingThisChapter: Boolean,
-        onPlayPauseClick: () -> Unit,
-        currentPosition: Long,
-        totalDuration: Long,
-        isBuffering: Boolean,
-        onSeekTo: (Long) -> Unit
-    ) {
-        ElevatedCard(modifier = Modifier.fillMaxWidth()) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = chapter.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(bottom = 12.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = { onViewPdf(chapter.pdfPath) },
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(Icons.Filled.MenuBook, contentDescription = "Read PDF", modifier = Modifier.size(ButtonDefaults.IconSize))
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Read PDF")
-                    }
-                    Button(
-                        onClick = onPlayPauseClick,
-                        modifier = Modifier.weight(1f),
-                        enabled = !isBuffering // Disable button while buffering
-                    ) {
-                        if (isBuffering) {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(ButtonDefaults.IconSize),
-                                color = LocalContentColor.current
-                            )
-                        } else {
-                            Icon(
-                                imageVector = if (isPlayingThisChapter) Icons.Filled.Pause else Icons.Filled.PlayArrow,
-                                contentDescription = if (isPlayingThisChapter) "Pause Audio" else "Play Audio",
-                                modifier = Modifier.size(ButtonDefaults.IconSize)
-                            )
-                        }
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(if (isPlayingThisChapter) "Pause" else "Play")
+@Composable
+fun ChapterItem(
+    chapter: Chapter,
+    onOpenNewNcert: (Chapter) -> Unit,
+    onOpenOldNcert: (Chapter) -> Unit,
+    onPlayAudio: (Chapter) -> Unit
+) {
+    ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = chapter.name,
+                style = MaterialTheme.typography.titleLarge,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Button(onClick = { onOpenNewNcert(chapter) }) {
+                    Text("New NCERT")
+                }
+                chapter.oldPdfPath?.let {
+                    OutlinedButton(onClick = { onOpenOldNcert(chapter) }) {
+                        Text("Old NCERT")
                     }
                 }
-                if (totalDuration > 0) {
-                    // State to hold slider position during user interaction (seeking)
-                    var sliderPosition by remember(currentPosition, isPlayingThisChapter) { mutableStateOf(currentPosition.toFloat()) }
-                    var isSeeking by remember { mutableStateOf(false) }
-
-                    Column(modifier = Modifier.padding(top = 8.dp)) {
-                        Slider(
-                            value = if (isSeeking) sliderPosition else currentPosition.toFloat(),
-                            onValueChange = { newPosition ->
-                                isSeeking = true
-                                sliderPosition = newPosition
-                            },
-                            onValueChangeFinished = {
-                                onSeekTo(sliderPosition.toLong())
-                                isSeeking = false
-                            },
-                            valueRange = 0f..totalDuration.toFloat(),
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            // Update time label instantly during seek
-                            val displayPosition = if (isSeeking) sliderPosition.toLong() else currentPosition
-                            Text(text = formatTimeMillis(displayPosition), style = MaterialTheme.typography.bodySmall)
-                            Text(text = formatTimeMillis(totalDuration), style = MaterialTheme.typography.bodySmall)
-                        }
+                chapter.audioPath?.let {
+                    OutlinedButton(onClick = { onPlayAudio(chapter) }) {
+                        Text("Play Audio")
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+fun FullScreenMessage(message: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = message,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
